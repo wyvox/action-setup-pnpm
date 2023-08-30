@@ -26,6 +26,8 @@ inputs:
 runs:
   using: 'composite'
   steps:
+    # This is kind of like volta, but supports more ways of specifying the pnpm version
+    # not everyone uses volta, and its important to still respect their choice of package manager version
     - name: 'Determine pnpm version'
       id: resolved-pnpm
       shell: 'bash'
@@ -98,27 +100,42 @@ runs:
         echo "version=$__resolved_version__"  >> $GITHUB_OUTPUT
 
 
+    # It turns out that pnpm does have a flag for this, 
+    # but it's not documented on the website, 
+    # and there is active desire to *not* document on the website.
+    #
+    # However, `pnpm install --help` provides the information that was needed for this step to have been avoided.
     - name: 'Remove lockfile'
       shell: 'bash'
       run: |
         echo "Detected option --no-lockfile. Lockfile will be deleted before install."
         rm -f pnpm-lock.yaml
       if: ${{ inputs.no-lockfile == 'true' }}
+
+    # The pnpm action:
+    # - no support for volta
+    # - no support for cache
     - name: 'Install pnpm'
-      # this action aliases the major (via branch) to the latest full version
-      # https://github.com/pnpm/action-setup/branches/all
       uses: pnpm/action-setup@v2
       with:
         version: ${{ steps.resolved-pnpm.outputs.version }}
         run_install: false
+
+    # The Node Action
+    # - cache is turned off by default 
+    # - implements the same cache recommended in the pnpm/action-setup readme
+    # - support for volta for node only, volta is not actually installed
+    # - does not install pnpm
     - name: 'Setup node and the cache for pnpm'
-      # this action aliases the major to the latest full version 
-      # https://github.com/actions/setup-node/tags
       uses: actions/setup-node@v3
       with:
         cache: 'pnpm'
         node-version: ${{ inputs.node-version }}
         registry-url: ${{ inputs.node-registry-url }}
+
+    # It's only efficient to install dependencies
+    # after the cache is set up -- otherwise we don't cache anything.
+    # (the cache is set up in setup-node@v3+)
     - name: 'Install dependencies'
       shell: 'bash'
       run: pnpm install ${{ inputs.args }}

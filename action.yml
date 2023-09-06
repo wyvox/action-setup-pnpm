@@ -125,6 +125,14 @@ runs:
     # - cache is turned off by default 
     # - implements the same cache recommended in the pnpm/action-setup readme
     # - support for volta for node only, volta is not actually installed
+    #   We don't want to install volta, as it turns out, because volta, as an action, hasn't been stable
+    #   (volta is perfectly fine for local tooling management)
+    #   In C.I., the volta-action, often produces this error:
+    #     Please ensure the correct version is specified.
+    #     Volta error: Error cause: failed to unpack /opt/hostedtoolcache/volta/1.1.1/x64/tmp/.tmpurLv6D/node-v16.20.0-linux-x64/bin/node
+    #     See this issue report: https://github.com/volta-cli/action/issues/77
+    #
+    #     Note also that volta's action does not have formal support for pnpm, nor its cache.
     # - does not install pnpm
     - name: 'Setup node and the cache for pnpm'
       uses: actions/setup-node@v3

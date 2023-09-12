@@ -15,10 +15,6 @@ inputs:
   pnpm-version:
     description: 'Override the default pnpm version, which defaults to the latest 8.x'
     required: false
-  no-lockfile:
-    description: 'When testing with floating dependencies, the lockfile will need to be ignored. Enabling this deletes the lockfile before running pnpm install. This is safe as long as further action steps do not commit the change'
-    required: false
-    default: false
   args:
     description: 'Directly pass args to pnpm'
     required: false
@@ -98,19 +94,6 @@ runs:
         echo "Resolved pnpm @ $__resolved_version__"
 
         echo "version=$__resolved_version__"  >> $GITHUB_OUTPUT
-
-
-    # It turns out that pnpm does have a flag for this, 
-    # but it's not documented on the website, 
-    # and there is active desire to *not* document on the website.
-    #
-    # However, `pnpm install --help` provides the information that was needed for this step to have been avoided.
-    - name: 'Remove lockfile'
-      shell: 'bash'
-      run: |
-        echo "Detected option --no-lockfile. Lockfile will be deleted before install."
-        rm -f pnpm-lock.yaml
-      if: ${{ inputs.no-lockfile == 'true' }}
 
     # The pnpm action:
     # - no support for volta

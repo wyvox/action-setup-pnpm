@@ -68,16 +68,6 @@ Passes through any args directly to `pnpm install`.
     args: '--ignore-scripts --fix-lockfile'
 ```
 
-### `no-lockfile`
-
-Boolean flag useful for tossing out the lockfile for testing if in-range floating dependency changes have accidentally broken things.
-
-```yaml
-- uses: wyvox/action-setup-pnpm@v2
-  with:
-    no-lockfile: true
-```
-
 ## Why?
 
 [`pnpm/action-setup`](https://github.com/pnpm/action-setup/) can install dependencies on its own, but then no cache is used from [`actions/setup-node`](https://github.com/actions/setup-node).

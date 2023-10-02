@@ -123,7 +123,7 @@ runs:
         cache: 'pnpm'
         node-version: ${{ inputs.node-version }}
         # This is how volta support is added
-        node-version-file: package.json
+        node-version-file: 'package.json'
         registry-url: ${{ inputs.node-registry-url }}
 
     # It's only efficient to install dependencies

@@ -7,7 +7,7 @@ Correctly sets up node, pnpm, and cache for pnpm dependencies so that installati
 ```yaml
 steps:
   - uses: actions/checkout@v3
-  - uses: wyvox/action-setup-pnpm@v2
+  - uses: wyvox/action-setup-pnpm@v3
 ```
 
 ## Support:
@@ -24,7 +24,7 @@ you end up having _one_ extra line than optimal if you need to customize anythin
 unless doing inline yaml-object syntax -- example:
 
 ```yaml
-- uses: wyvox/action-setup-pnpm@v2
+- uses: wyvox/action-setup-pnpm@v3
   with: { node-version: 18 }
 ```
 
@@ -33,7 +33,7 @@ unless doing inline yaml-object syntax -- example:
 Allows changing the `node-version` passed to `actions/setup-node`.
 
 ```yaml
-- uses: wyvox/action-setup-pnpm@v2
+- uses: wyvox/action-setup-pnpm@v3
   with:
     node-version: 18
 ```
@@ -43,7 +43,7 @@ Allows changing the `node-version` passed to `actions/setup-node`.
 Allows changing the `registry-url` passed to `actions/setup-node`.
 
 ```yaml
-- uses: wyvox/action-setup-pnpm@v2
+- uses: wyvox/action-setup-pnpm@v3
   with:
     node-registry-url: "https://registry.npmjs.org"
 ```
@@ -63,7 +63,7 @@ Allows changing the `pnpm-version` passed to `pnpm/action-setup`.
 Passes through any args directly to `pnpm install`.
 
 ```yaml
-- uses: wyvox/action-setup-pnpm@v2
+- uses: wyvox/action-setup-pnpm@v3
   with:
     args: '--ignore-scripts --fix-lockfile'
 ```

@@ -38,6 +38,19 @@ Allows changing the `node-version` passed to `actions/setup-node`.
     node-version: 18
 ```
 
+### `node-version-file`
+
+Allows changing the `node-version-file` passed to `actions/setup-node`.
+
+The default has changed from `actions/setup-node`'s `''` to `'package.json'`, enabling easy volta usage with 0 configuration for consumers of `wyvox/action-setup-pnpm`.
+_not_ providing a volta config also have 0 consequence.
+
+```yaml
+- uses: wyvox/action-setup-pnpm@v2
+  with:
+    node-version-file: '.node-version'
+```
+
 ### `node-registry-url`
 
 Allows changing the `registry-url` passed to `actions/setup-node`.

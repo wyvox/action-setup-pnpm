@@ -46,7 +46,7 @@ The default has changed from `actions/setup-node`'s `''` to `'package.json'`, en
 _not_ providing a volta config also have 0 consequence.
 
 ```yaml
-- uses: wyvox/action-setup-pnpm@v2
+- uses: wyvox/action-setup-pnpm@v3
   with:
     node-version-file: '.node-version'
 ```

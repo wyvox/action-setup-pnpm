@@ -95,7 +95,7 @@ steps:
   - uses: pnpm/action-setup@v2
     with:
       version: 8
-  - uses: actions/setup-node@v3
+  - uses: actions/setup-node@v4
     with:
       cache: 'pnpm'
   - run: pnpm install

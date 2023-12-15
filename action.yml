@@ -122,7 +122,7 @@ runs:
     #     Note also that volta's action does not have formal support for pnpm, nor its cache.
     # - does not install pnpm
     - name: 'Setup node and the cache for pnpm'
-      uses: actions/setup-node@v3
+      uses: actions/setup-node@v4
       with:
         cache: 'pnpm'
         # If specified, takes precedence over node-version-file

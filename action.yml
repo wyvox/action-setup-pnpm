@@ -1,5 +1,5 @@
-name: 'Setup node, pnpm, and dependency cache'
-description: 'Installs pnpm, uses actions/setup-node for cache, and then runs pnpm install'
+name: 'All in one: setup node, pnpm, cache'
+description: 'Installs pnpm, uses actions/setup-node for cache, and then runs pnpm install. Uses package.json for the "node-version" by default.'
 author: NullVoxPopuli
 branding:
   icon: 'package'

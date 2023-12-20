@@ -100,8 +100,10 @@ runs:
         echo "version=$__resolved_version__"  >> $GITHUB_OUTPUT
 
     # The pnpm action:
-    # - no support for volta
-    # - no support for cache
+    # - no support for volta 
+    #   (or other places the pnpm version can be specified, such as package.json)
+    # - no support for cache 
+    #   (that's provided by setup-node)
     - name: 'Install pnpm'
       uses: pnpm/action-setup@v2
       with:

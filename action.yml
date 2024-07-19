@@ -112,7 +112,7 @@ runs:
     # - no support for cache 
     #   (that's provided by setup-node)
     - name: 'Install pnpm'
-      uses: pnpm/action-setup@v3
+      uses: pnpm/action-setup@v4
       with:
         version: ${{ steps.resolved-pnpm.outputs.version }}
         run_install: false

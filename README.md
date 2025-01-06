@@ -92,9 +92,7 @@ To set this up on your own, you would required _three_ manual steps in your work
 ```yaml
 steps:
   # ...
-  - uses: pnpm/action-setup@v2
-    with:
-      version: 8
+  - uses: pnpm/action-setup@v4
   - uses: actions/setup-node@v4
     with:
       cache: 'pnpm'

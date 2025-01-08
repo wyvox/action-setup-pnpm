@@ -11,7 +11,7 @@ inputs:
   node-version:
     description: "Override the default node version, or override what is specified in your project's volta config"
     required: false
-  node-version-file: 
+  node-version-file:
     description: "Override where the default node version is read from. By default this reads from package.json, which includes support for volta.node. Specifying node-version will override this"
     required: false
     default: 'package.json'
@@ -19,15 +19,26 @@ inputs:
     description: "Optional registry to set up for auth. Will set the registry in a project level .npmrc and .yarnrc file, and set up auth to read in from env.NODE_AUTH_TOKEN."
     required: false
     default: ''
-  
+  cache-dependency-path:
+    description: "Used to specify the path to a dependency file: package-lock.json, yarn.lock, etc. It will generate hash from the target file for primary key. It works only If cache is specified. Supports wildcards or a list of file names for caching multiple dependencies."
+    required: false
+    default: ''
+
   ########################
   # For pnpm/setup-action
-  ########################  
+  ########################
   pnpm-version:
     description: 'Override the default pnpm version, which defaults to the latest 8.x'
     required: false
   args:
     description: 'Directly pass args to pnpm'
+    required: false
+
+  ########################
+  # For wyvox/action-setup-pnpm
+  ########################
+  working-directory:
+    description: ''
     required: false
 
 runs:
@@ -44,13 +55,13 @@ runs:
       #   3. package.json#packageManager
       #   4. default pnpm version (^8.0.0)
       run: |
-        if [ ! -f "package.json" ]; then 
+        if [ ! -f "${{inputs.node-version-file}}" ]; then
           echo "Could not find package.json. Did actions/checkout run?"
           exit 1
         fi
 
         forcedVersion=${{inputs.pnpm-version}}
-        packageJson=$(cat package.json)
+        packageJson=$(cat ${{inputs.node-version-file}})
         # when using jq, we unquote, trim extra invisibles, and then remove "null" from the output
         packageManager=$(echo $packageJson | jq -r '.packageManager' | tr -dc '[:print:]' | sed "s/null//g" )
         voltaPnpm=$(echo $packageJson | jq -r '.volta.pnpm' | tr -dc '[:print:]' | sed "s/null//g" )
@@ -69,7 +80,7 @@ runs:
             echo "Using inputs.pnpm-version"
             __resolved_version__=$forcedVersion
             return
-          else 
+          else
             echo "No pnpm-version override detected"
           fi
 
@@ -77,25 +88,25 @@ runs:
             echo "Using package.json#volta.pnpm"
             __resolved_version__=$voltaPnpm
             return
-          else 
+          else
             echo "package.json#volta.pnpm was not defined"
           fi
 
           if [[ "$packageManager" =~ ^"pnpm" ]]; then
             version=$(echo $packageManager | cut -d "@" -f2)
-            
-            if [[ "$version" != "" && "$version" != "$packageManager" ]]; then 
+
+            if [[ "$version" != "" && "$version" != "$packageManager" ]]; then
               echo "Using package.json#packageManager"
               __resolved_version__=$version
               return
-            else 
+            else
               echo "package.json#packageManager ($packageManager) did not specify a version"
             fi
           else
             echo "package.json#packageManager ($packageManager) did not start with 'pnpm' or was not defined."
           fi
 
-          # default 
+          # default
           __resolved_version__=8
         }
 
@@ -107,9 +118,9 @@ runs:
         echo "version=$__resolved_version__"  >> $GITHUB_OUTPUT
 
     # The pnpm action:
-    # - no support for volta 
+    # - no support for volta
     #   (or other places the pnpm version can be specified, such as package.json)
-    # - no support for cache 
+    # - no support for cache
     #   (that's provided by setup-node)
     - name: 'Install pnpm'
       uses: pnpm/action-setup@v4
@@ -118,7 +129,7 @@ runs:
         run_install: false
 
     # The Node Action
-    # - cache is turned off by default 
+    # - cache is turned off by default
     # - implements the same cache recommended in the pnpm/action-setup readme
     # - support for volta for node only, volta is not actually installed
     #   We don't want to install volta, as it turns out, because volta, as an action, hasn't been stable
@@ -139,6 +150,7 @@ runs:
         # Default node version read from package.json, but can be changed by passing in inputs.node-version-file
         node-version-file: ${{ inputs.node-version-file }}
         registry-url: ${{ inputs.node-registry-url }}
+        cache-dependency-path: ${{ inputs.cache-dependency-path }}
 
     # It's only efficient to install dependencies
     # after the cache is set up -- otherwise we don't cache anything.
@@ -146,3 +158,4 @@ runs:
     - name: 'Install dependencies'
       shell: 'bash'
       run: pnpm install ${{ inputs.args }}
+      working-directory: ${{ inputs.working-directory }}

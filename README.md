@@ -6,7 +6,7 @@ Correctly sets up node, pnpm, and cache for pnpm dependencies so that installati
 
 ```yaml
 steps:
-  - uses: actions/checkout@v3
+  - uses: actions/checkout@v4
   - uses: wyvox/action-setup-pnpm@v3
 ```
 

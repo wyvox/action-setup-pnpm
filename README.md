@@ -93,6 +93,11 @@ To set this up on your own, you would required _three_ manual steps in your work
 steps:
   # ...
   - uses: pnpm/action-setup@v4
+  - uses: pnpm/action-setup@v4
+      name: Install pnpm
+      with:
+        version: 10
+        run_install: false
   - uses: actions/setup-node@v4
     with:
       cache: 'pnpm'

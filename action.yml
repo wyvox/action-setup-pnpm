@@ -112,7 +112,7 @@ runs:
     # - no support for cache 
     #   (that's provided by setup-node)
     - name: 'Install pnpm'
-      uses: pnpm/action-setup@v4
+      uses: pnpm/action-setup@v6
       with:
         version: ${{ steps.resolved-pnpm.outputs.version }}
         run_install: false
@@ -131,7 +131,7 @@ runs:
     #     Note also that volta's action does not have formal support for pnpm, nor its cache.
     # - does not install pnpm
     - name: 'Setup node and the cache for pnpm'
-      uses: actions/setup-node@v4
+      uses: actions/setup-node@v7
       with:
         cache: 'pnpm'
         # If specified, takes precedence over node-version-file
